@@ -5,10 +5,11 @@
 #include "monster.h"
 #include "keys.h"
 #include "cheat.h"
-#include <QTime>
+//#include <QTime>
 #include <QtMath>
 #include <QApplication>
 #include <QDebug>
+#include <QRandomGenerator>
 
 // Constants
 const int kPixlen = 32;             // The pixels of each block
@@ -157,16 +158,48 @@ void MainWindow::CreateInform() {           // Print player information
     AddPictureItem(-82, 130, "info2");
     AddPictureItem(-83, 145, "info3");
     AddPictureItem(-83, 230, "info4");
-    AddTextItem(-50, 5, QString::number(player.GetFloor()+1, kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
-    AddTextItem(-65, 100, "Lv "+QString::number(player.GetLevel() +1, kDecimal), 10, QColor(qrand()%256,qrand()%256,qrand()%256));
-    AddTextItem(-43, 126, QString::number(player.GetHp(), kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
-    AddTextItem(-43, 142, QString::number(player.GetAttack(), kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
-    AddTextItem(-43, 158, QString::number(player.GetDefend(), kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
-    AddTextItem(-43, 174, QString::number(player.GetMoney(), kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
-    AddTextItem(-43, 190, QString::number(player.GetNeed() - player.GetExp(), kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
-    AddTextItem(-40, 240, QString::number(keys.GetYellow(), kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
-    AddTextItem(-40, 265, QString::number(keys.GetBlue(), kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
-    AddTextItem(-40, 290, QString::number(keys.GetRed(), kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
+
+    QRandomGenerator::global()->generate();
+    AddTextItem(-50, 5, QString::number(player.GetFloor()+1, kDecimal), 8,
+                QColor(QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256));
+    AddTextItem(-65, 100, "Lv "+QString::number(player.GetLevel() +1, kDecimal), 10,
+                QColor(QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256));
+    AddTextItem(-43, 126, QString::number(player.GetHp(), kDecimal), 8,
+                QColor(QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256));
+    AddTextItem(-43, 142, QString::number(player.GetAttack(), kDecimal), 8,
+                QColor(QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256));
+    AddTextItem(-43, 158, QString::number(player.GetDefend(), kDecimal), 8,
+                QColor(QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256));
+    AddTextItem(-43, 174, QString::number(player.GetMoney(), kDecimal), 8,
+                QColor(QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256));
+    AddTextItem(-43, 190, QString::number(player.GetNeed() - player.GetExp(), kDecimal), 8,
+                QColor(QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256));
+    AddTextItem(-40, 240, QString::number(keys.GetYellow(), kDecimal), 8,
+                QColor(QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256));
+    AddTextItem(-40, 265, QString::number(keys.GetBlue(), kDecimal), 8,
+                QColor(QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256));
+    AddTextItem(-40, 290, QString::number(keys.GetRed(), kDecimal), 8,
+                QColor(QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256,
+                       QRandomGenerator::global()->generate()%256));
     if (mode == -1)
         AddTextItem(-90, 30, "God Mode!!!", 12, kRed);
     if (tools.GetBook())
@@ -277,8 +310,8 @@ void MainWindow::slotFight(int num) {       // Fight and draw the result
     int playerMiss = 0, monsterMiss = 0;
     int playerCrit = 0, monsterCrit = 0;
     QString str1, str2;
-    QTime t = QTime::currentTime();
-    qsrand(t.msec()+t.second()*1000);
+//    QTime t = QTime::currentTime();
+//    qsrand(t.msec()+t.second()*1000);
     num -= 11;
 
     monsterHp = monsters[num].GetHp();
@@ -288,7 +321,7 @@ void MainWindow::slotFight(int num) {       // Fight and draw the result
 
     // While not win or lose do, take turns to attack
     while (1) {
-        random = qrand() % 99 + 1;
+        random = QRandomGenerator::global()->generate() % 99 + 1;
         damage = qMax(player.GetAttack() - monsters[num].GetDefend(), 1);
         damage += qFloor(damage*0.5*(random >= player.GetCrit()));    // Check if Crit or not
         monsterHp -= damage * (random > monsters[num].GetMiss());     // Check if Miss or not
@@ -300,7 +333,7 @@ void MainWindow::slotFight(int num) {       // Fight and draw the result
             monsterHp = 0;
             break;
         }
-        random = qrand() % 99 + 1;
+        random = QRandomGenerator::global()->generate() % 99 + 1;
         damage = qMax(monsters[num].GetAttack() - player.GetDefend(), 1);
         damage += qFloor(damage*0.5*(random >= monsters[num].GetCrit()));    // Check if Crit or not
         playerHp -= mode * damage * (random > player.GetMiss());             // Check if Miss or not, also check cheat mode

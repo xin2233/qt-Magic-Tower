@@ -1,3 +1,8 @@
+
+# update
+- 更新到qt 5.15
+- 舍弃qsrand 和qrand
+
 # Magic-Tower-Qt
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
